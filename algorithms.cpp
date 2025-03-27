@@ -1,5 +1,5 @@
-#include "algorithms.h"
-#include "ds.h"
+#include "algorithms.hpp"
+#include "ds.hpp"
 #include <iostream>
 #include <limits>
 

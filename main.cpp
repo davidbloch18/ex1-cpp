@@ -1,6 +1,6 @@
 #include <iostream>
 #include "graph.hpp"
-#include "Algorithms.hpp"
+#include "algorithms.hpp"
 
 int main()
 {
