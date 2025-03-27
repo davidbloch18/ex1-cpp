@@ -1,52 +1,25 @@
-#include "graph.h"
-#include <iostream>
+#ifndef GRAPH_H
+#define GRAPH_H
 
 namespace graph
 {
 
-    Graph::Graph(int vertices)
+    class Graph
     {
-        numVertices = vertices;
-        adjMatrix = new int *[numVertices];
-        for (int i = 0; i < numVertices; i++)
-        {
-            adjMatrix[i] = new int[numVertices]{0};
-        }
-    }
+    private:
+        int numVertices;
+        int **adjMatrix;
 
-    Graph::~Graph()
-    {
-        for (int i = 0; i < numVertices; i++)
-        {
-            delete[] adjMatrix[i];
-        }
-        delete[] adjMatrix;
-    }
-
-    void Graph::addEdge(int src, int dest, int weight)
-    {
-        adjMatrix[src][dest] = weight;
-        adjMatrix[dest][src] = weight;
-    }
-
-    void Graph::removeEdge(int src, int dest)
-    {
-        if (adjMatrix[src][dest] == 0)
-            throw std::runtime_error("Edge does not exist.");
-        adjMatrix[src][dest] = 0;
-        adjMatrix[dest][src] = 0;
-    }
-
-    void Graph::print_graph()
-    {
-        for (int i = 0; i < numVertices; i++)
-        {
-            for (int j = 0; j < numVertices; j++)
-            {
-                std::cout << adjMatrix[i][j] << " ";
-            }
-            std::cout << std::endl;
-        }
-    }
+    public:
+        Graph(int vertices);
+        ~Graph();
+        void addEdge(int src, int dest, int weight = 1);
+        void removeEdge(int src, int dest);
+        void print_graph();
+        int getVertices() { return numVertices; }
+        int **getAdjMatrix() { return adjMatrix; }
+    };
 
 } // namespace graph
+
+#endif

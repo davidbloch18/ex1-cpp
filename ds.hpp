@@ -1,129 +1,57 @@
-#include "ds.h"
-#include <iostream>
+#ifndef DS_H
+#define DS_H
 
 namespace ds
 {
 
-    // מימוש תור (Queue)
-    Queue::Queue(int size)
+    // מבנה נתונים: תור (Queue) ללא STL
+    class Queue
     {
-        capacity = size;
-        arr = new int[capacity];
-        front = rear = -1;
-    }
+    private:
+        int *arr;
+        int front, rear, capacity;
 
-    Queue::~Queue()
+    public:
+        Queue(int size);
+        ~Queue();
+        void enqueue(int value);
+        int dequeue();
+        bool isEmpty();
+    };
+
+    // מבנה נתונים: תור עדיפויות (Priority Queue) ללא STL
+    class PriorityQueue
     {
-        delete[] arr;
-    }
-
-    void Queue::enqueue(int value)
-    {
-        if (rear == capacity - 1)
-            return;
-        if (front == -1)
-            front = 0;
-        arr[++rear] = value;
-    }
-
-    int Queue::dequeue()
-    {
-        if (front == -1 || front > rear)
-            return -1;
-        return arr[front++];
-    }
-
-    bool Queue::isEmpty()
-    {
-        return front == -1 || front > rear;
-    }
-
-    // מימוש תור עדיפויות (Priority Queue)
-    PriorityQueue::PriorityQueue() : head(nullptr) {}
-
-    PriorityQueue::~PriorityQueue()
-    {
-        while (head)
+    private:
+        struct Node
         {
-            Node *temp = head;
-            head = head->next;
-            delete temp;
-        }
-    }
+            int value;
+            int priority;
+            Node *next;
+        };
+        Node *head;
 
-    void PriorityQueue::insert(int value, int priority)
-    {
-        Node *newNode = new Node{value, priority, nullptr};
-        if (!head || priority < head->priority)
-        {
-            newNode->next = head;
-            head = newNode;
-            return;
-        }
-        Node *temp = head;
-        while (temp->next && temp->next->priority <= priority)
-        {
-            temp = temp->next;
-        }
-        newNode->next = temp->next;
-        temp->next = newNode;
-    }
+    public:
+        PriorityQueue();
+        ~PriorityQueue();
+        void insert(int value, int priority);
+        int extractMin();
+        bool isEmpty();
+    };
 
-    int PriorityQueue::extractMin()
+    // מבנה נתונים: Union-Find (ללא STL)
+    class UnionFind
     {
-        if (!head)
-            return -1;
-        int value = head->value;
-        Node *temp = head;
-        head = head->next;
-        delete temp;
-        return value;
-    }
+    private:
+        int *parent, *rank, size;
 
-    bool PriorityQueue::isEmpty()
-    {
-        return head == nullptr;
-    }
-
-    // מימוש Union-Find
-    UnionFind::UnionFind(int n)
-    {
-        size = n;
-        parent = new int[n];
-        rank = new int[n]();
-        for (int i = 0; i < n; i++)
-            parent[i] = i;
-    }
-
-    UnionFind::~UnionFind()
-    {
-        delete[] parent;
-        delete[] rank;
-    }
-
-    int UnionFind::find(int x)
-    {
-        if (parent[x] != x)
-            parent[x] = find(parent[x]); // דחיסת נתיבים
-        return parent[x];
-    }
-
-    void UnionFind::unite(int x, int y)
-    {
-        int rootX = find(x);
-        int rootY = find(y);
-        if (rootX != rootY)
-        {
-            if (rank[rootX] > rank[rootY])
-                parent[rootY] = rootX;
-            else if (rank[rootX] < rank[rootY])
-                parent[rootX] = rootY;
-            else
-            {
-                parent[rootY] = rootX;
-                rank[rootX]++;
-            }
-        }
-    }
+    public:
+        UnionFind(int n);
+        ~UnionFind();
+        int find(int x);
+        void unite(int x, int y);
+    };
 
 } // namespace ds
+
+#endif
